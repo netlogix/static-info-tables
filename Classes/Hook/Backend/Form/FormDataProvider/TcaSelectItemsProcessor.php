@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -37,7 +37,6 @@ use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Schema\Struct\SelectItem;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
@@ -57,7 +56,7 @@ class TcaSelectItemsProcessor
                 // Avoid circular relation
                 $row = $PA['row'] ?? [];
                 foreach (($PA['items'] ?? []) as $index => $item) {
-                    if ($item[1] == $row['uid']) {
+                    if ($item->getValue() == $row['uid']) {
                         unset($PA['items'][$index]);
                     }
                 }
@@ -124,15 +123,13 @@ class TcaSelectItemsProcessor
         $translatedItems = $items;
         if (isset($translatedItems) && is_array($translatedItems)) {
             foreach ($translatedItems as $key => $item) {
-                if (is_array($translatedItems[$key]) && array_key_exists(1, $translatedItems[$key]) && ($translatedItems[$key][1] ?? '')) {
+            	if (isset($translatedItems[$key]) && $translatedItems[$key] instanceof SelectItem && $translatedItems[$key]->getValue() > 0) {
                     //Get isocode if present
-                    $code = strstr($item[0], '(');
+                    $code = strstr($item->getLabel(), '(');
                     $code2 = strstr(substr($code, 1), '(');
                     $code = $code2 ? $code2 : $code;
-                    // Translate
-                    $translatedItems[$key][0] = LocalizationUtility::translate(['uid' => $item[1]], $tableName);
-                    // Re-append isocode, if present
-                    $translatedItems[$key][0] = $translatedItems[$key][0] . ($code ? ' ' . $code : '');
+                    // Translate and Re-append isocode, if present
+                    $translatedItems[$key]->offsetSet('label', LocalizationUtility::translate(['uid' => $item['value']], $tableName) . ($code ? ' ' . $code : ''));
                 }
             }
             $currentLocale = setlocale(LC_COLLATE, '0');
@@ -156,7 +153,7 @@ class TcaSelectItemsProcessor
      */
     protected function strcollOnLabels($itemA, $itemB)
     {
-        return strcoll($itemA[0], $itemB[0]);
+        return strcoll($itemA->getLabel(), $itemB->getLabel());
     }
 
     /**
@@ -174,15 +171,7 @@ class TcaSelectItemsProcessor
             // Collect items uid's
             $uids = [];
             foreach ($items as $key => $item) {
-                if ((int)VersionNumberUtility::getCurrentTypo3Version() < 12) {
-                    if (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
-                        $uids[] = $item[1];
-                    }
-                } else {
-                    if (isset($items[$key]) && $items[$key] instanceof SelectItem) {
-                        $uids[] = $items[$key]->getValue();
-                    }
-                }
+				$uids[] = $item->getValue();
             }
             $uidList = implode(',', $uids);
             if (!empty($uidList)) {
@@ -234,7 +223,6 @@ class TcaSelectItemsProcessor
                     // Replace the items index field
                     foreach ($items as $key => $item) {
                         if (is_a($item, SelectItem::class) && $item->getValue() > 0) {
-                            // Since TYPO3 12 LTS
                             $object = $uidIndexedObjects[$item->getValue()] ?? false;
                             if ($object) {
                                 $value = $object->_getProperty($indexProperties[0]);
@@ -242,12 +230,6 @@ class TcaSelectItemsProcessor
                                     $value .=  '_' . $object->_getProperty($indexProperties[1]);
                                 }
                                 $item->offsetSet('value', $value);
-                            }
-                        } elseif (is_array($items[$key]) && array_key_exists(1, $items[$key]) && ($items[$key][1] ?? 0)) {
-                            $object = $uidIndexedObjects[$items[$key][1]];
-                            $items[$key][1] = $object->_getProperty($indexProperties[0]);
-                            if ($indexFields[1] && $object->_getProperty($indexProperties[1])) {
-                                $items[$key][1] .=  '_' . $object->_getProperty($indexProperties[1]);
                             }
                         }
                     }
