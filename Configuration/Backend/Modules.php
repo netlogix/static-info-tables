@@ -1,10 +1,13 @@
 <?php
 declare(strict_types = 1);
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Registers the Static Info Tables Manager backend module, if enabled
  */
-//if ($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['static_info_tables']['enableManager'] ?? false) {
+if (GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('static_info_tables')['enableManager'] ?? false) {
 	return [
 		'staticinfomanager' => [
 			'parent' => 'tools',
@@ -29,6 +32,6 @@ declare(strict_types = 1);
 			]
 		]
 	];
-/*} else {
+} else {
 	return [];
-}*/
+}
