@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Controller;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,6 +40,8 @@ use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocaleUtility;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Module\ModuleData;
+use TYPO3\CMS\Backend\Module\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Localization\Locales;
@@ -163,6 +165,11 @@ class ManagerController extends ActionController
     }
 
     /**
+     * @var ModuleTemplateFactory
+     */
+    protected $moduleTemplateFactory;
+
+    /**
      * Dependency injection of the Module Template Factory
      *
      * @param ModuleTemplateFactory $moduleTemplateFactory
@@ -172,6 +179,20 @@ class ManagerController extends ActionController
     {
         $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
+
+    /**
+     * Module data
+     *
+     * @var ModuleData
+     */
+    protected $moduleData;
+
+    /**
+     * Module template
+     *
+     * @var ModuleTemplate
+     */
+    protected $moduleTemplate;
 
     /**
      * Init module state.
