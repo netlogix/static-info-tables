@@ -5,19 +5,22 @@
 		<body>
 			<trans-unit id="static_territories.title" xml:space="preserve">
 				<source>Territories</source>
-			<target></target></trans-unit>
+				<target>Territoires</target>
+			</trans-unit>
 			<trans-unit id="static_territories_item.tr_iso_nr" xml:space="preserve">
 				<source>ISO nr territory code:</source>
 			<target></target></trans-unit>
 			<trans-unit id="static_territories_item.tr_parent_territory_uid" xml:space="preserve">
 				<source>Territory in which this one is contained:</source>
-			<target></target></trans-unit>
+				<target>Territoire dans lequel est contenu celui-ci:</target>
+			</trans-unit>
 			<trans-unit id="static_territories_item.tr_parent_iso_nr" xml:space="preserve">
 				<source>ISO numeric code of territory in which this one is contained:</source>
 			<target></target></trans-unit>
 			<trans-unit id="static_territories_item.tr_name_en" xml:space="preserve" approved="yes">
 				<source>Name (EN):</source>
-			<target state="translated">Nom (EN) :</target></trans-unit>
+			    <target>Nom (anglais):</target>
+			</trans-unit>
 			<trans-unit id="static_countries.title" xml:space="preserve" approved="yes">
 				<source>Countries</source>
 			<target state="translated">Pays</target></trans-unit>
@@ -32,25 +35,29 @@
 			<target></target></trans-unit>
 			<trans-unit id="static_countries_item.cn_official_name_local" xml:space="preserve">
 				<source>Official name (local):</source>
-			<target></target></trans-unit>
+			    <target>Nom officiel (local):</target>
+			</trans-unit>
 			<trans-unit id="static_countries_item.cn_official_name_en" xml:space="preserve">
 				<source>Official name (EN):</source>
-			<target></target></trans-unit>
+			    <target>Nom officiel (anglais):</target>
+			</trans-unit>
 			<trans-unit id="static_countries_item.cn_parent_territory_uid" xml:space="preserve">
 				<source>Territory in which this country is located:</source>
-			<target></target></trans-unit>
+			    <target>Territoire dans lequel ce pays est localisé:</target></trans-unit>
 			<trans-unit id="static_countries_item.cn_parent_tr_iso_nr" xml:space="preserve">
 				<source>ISO numeric code of territory in which this country is located:</source>
 			<target></target></trans-unit>
 			<trans-unit id="static_countries_item.cn_capital" xml:space="preserve" approved="yes">
 				<source>Capital:</source>
-			<target state="translated">Capitale :</target></trans-unit>
+			    <target state="translated">Capitale:</target>
+			</trans-unit>
 			<trans-unit id="static_countries_item.cn_tldomain" xml:space="preserve">
 				<source>Top level domain:</source>
 			<target></target></trans-unit>
 			<trans-unit id="static_countries_item.cn_currency_uid" xml:space="preserve">
 				<source>Currency:</source>
-			<target></target></trans-unit>
+			    <target>Devise:</target>
+			</trans-unit>
 			<trans-unit id="static_countries_item.cn_currency_iso_nr" xml:space="preserve">
 				<source>ISO 4217 Nr Currency code:</source>
 			<target></target></trans-unit>
@@ -62,13 +69,13 @@
 			<target></target></trans-unit>
 			<trans-unit id="static_countries_item.cn_uno_member" xml:space="preserve">
 				<source>UN member:</source>
-			<target></target></trans-unit>
+				<target>Membre de l'ONU:</target></trans-unit>
 			<trans-unit id="static_countries_item.cn_eu_member" xml:space="preserve">
 				<source>EU member:</source>
-			<target></target></trans-unit>
+			    <target>Membre de l'Union européenne:</target></trans-unit>
 			<trans-unit id="static_countries_item.cn_address_format" xml:space="preserve">
 				<source>Address format:</source>
-			<target></target></trans-unit>
+			    <target>Format d'adresse:</target></trans-unit>
 			<trans-unit id="static_countries_item.cn_address_format_1" xml:space="preserve">
 				<source>zip city</source>
 			<target></target></trans-unit>
@@ -103,10 +110,12 @@
 			<target></target></trans-unit>
 			<trans-unit id="static_countries_item.cn_short_local" xml:space="preserve">
 				<source>Short name (local):</source>
-			<target></target></trans-unit>
+				<target>Nom court (local)</target>
+		    </trans-unit>
 			<trans-unit id="static_countries_item.cn_short_en" xml:space="preserve">
 				<source>Short name (EN):</source>
-			<target></target></trans-unit>
+			    <target>Nom court (anglais)</target>
+			</trans-unit>
 			<trans-unit id="static_countries_item.cn_country_zones" xml:space="preserve">
 				<source>Country subdivisions:</source>
 			<target></target></trans-unit>
