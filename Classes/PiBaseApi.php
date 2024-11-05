@@ -39,6 +39,8 @@ use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -131,10 +133,9 @@ class PiBaseApi
      */
     public function init($conf = [])
     {
-    	if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
-            && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            $this->conf = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller')->tmpl->setup['plugin.'][$this->prefixId . '.'] ?? [];
-        }
+		$configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+		$typoscriptSettings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+		$this->conf = $typoscriptSettings['plugin.']['tx_staticinfotables.']['settings.'];
 
         $this->countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
         $this->currencyRepository = GeneralUtility::makeInstance(CurrencyRepository::class);
@@ -360,7 +361,7 @@ class PiBaseApi
             }
         }
         $query = $queryBuilder->executeQuery();
-        while ($row = $query->fetch()) {
+        while ($row = $query->fetchAssociative()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
                     $nameArray[$row['cn_iso_3']] = $row[$titleField];
@@ -428,7 +429,7 @@ class PiBaseApi
             }
         }
         $query = $queryBuilder->executeQuery();
-        while ($row = $query->fetch()) {
+        while ($row = $query->fetchAssociative()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
                     $nameArray[$row['zn_code']] = $row[$titleField];
@@ -475,7 +476,7 @@ class PiBaseApi
             $queryBuilder->where($addWhere);
         }
         $query = $queryBuilder->executeQuery();
-        while ($row = $query->fetch()) {
+        while ($row = $query->fetchAssociative()) {
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {
                     $nameArray[$row['cu_iso_3']] = $row[$titleField];
@@ -527,7 +528,7 @@ class PiBaseApi
             $queryBuilder->andWhere($addWhere);
         }
         $query = $queryBuilder->executeQuery();
-        while ($row = $query->fetch()) {
+        while ($row = $query->fetchAssociative()) {
             $code = $row['lg_iso_2'] . ($row['lg_country_iso_2'] ? '_' . $row['lg_country_iso_2'] : '');
             foreach ($titleFields as $titleField => $map) {
                 if ($row[$titleField] ?? false) {

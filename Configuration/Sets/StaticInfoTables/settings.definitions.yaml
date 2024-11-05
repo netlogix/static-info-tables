@@ -1,0 +1,30 @@
+categories:
+  staticInfoTables: ~
+  staticInfoTables.addressFormat:
+    parent: staticInfoTables
+
+settings:
+  staticinfotables.defaultCountry:
+    default: ""
+    type: string
+    category: staticInfoTables
+  staticinfotables.countriesAllowed:
+    default: ""
+    type: string
+    category: staticInfoTables
+  staticinfotables.defaultCountryZone:
+    default: ""
+    type: string
+    category: staticInfoTables
+  staticinfotables.defaultLanguage:
+    default: ""
+    type: string
+    category: staticInfoTables
+  staticinfotables.defaultCurrency:
+    default: "EUR"
+    type: string
+    category: staticInfoTables
+  staticinfotables.onCountryChangeAttribute:
+    default: "event.target.form.submit();"
+    type: string
+    category: staticInfoTables

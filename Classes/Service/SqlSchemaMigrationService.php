@@ -50,25 +50,25 @@ class SqlSchemaMigrationService
         $tempKeys = [];
         $tempKeysPrefix = [];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
-        $statement = $connection->query('SHOW TABLE STATUS FROM `' . $connection->getDatabase() . '`');
+        $statement = $connection->executeQuery('SHOW TABLE STATUS FROM `' . $connection->getDatabase() . '`');
         $tables = [];
-        while ($theTable = $statement->fetch()) {
+        while ($theTable = $statement->fetchAssociative()) {
             $tables[$theTable['Name']] = $theTable;
         }
         foreach ($tables as $tableName => $tableStatus) {
             // Fields
-            $statement = $connection->query('SHOW FULL COLUMNS FROM `' . $tableName . '`');
+            $statement = $connection->executeQuery('SHOW FULL COLUMNS FROM `' . $tableName . '`');
             $fieldInformation = [];
-            while ($fieldRow = $statement->fetch()) {
+            while ($fieldRow = $statement->fetchAssociative()) {
                 $fieldInformation[$fieldRow['Field']] = $fieldRow;
             }
             foreach ($fieldInformation as $fN => $fieldRow) {
                 $total[$tableName]['fields'][$fN] = $this->assembleFieldDefinition($fieldRow);
             }
             // Keys
-            $statement = $connection->query('SHOW KEYS FROM `' . $tableName . '`');
+            $statement = $connection->executeQuery('SHOW KEYS FROM `' . $tableName . '`');
             $keyInformation = [];
-            while ($keyRow = $statement->fetch()) {
+            while ($keyRow = $statement->fetchAssociative()) {
                 $keyInformation[] = $keyRow;
             }
             foreach ($keyInformation as $keyRow) {

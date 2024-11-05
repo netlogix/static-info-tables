@@ -43,7 +43,7 @@ CREATE TABLE static_country_zones (
 	zn_name_local varchar(128) DEFAULT '' NOT NULL,
 	zn_name_en varchar(50) DEFAULT '' NOT NULL,
 	zn_country_uid int(11) DEFAULT '0' NOT NULL,
-	zn_country_table tinytext,
+	zn_country_table varchar(20) DEFAULT 'static_countries' NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid,deleted)
 );

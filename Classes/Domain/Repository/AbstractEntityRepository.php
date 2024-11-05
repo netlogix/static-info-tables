@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -236,20 +236,21 @@ abstract class AbstractEntityRepository extends Repository
                     // Make localization field name
                     $localizationField = preg_replace('#_en$#', '_' . $locale, $field);
                     // Add the field if it does not yet exist
-                    if (!$fieldsInfo[$localizationField]) {
+                    if (!($fieldsInfo[$localizationField] ?? false)) {
                         // Get field length
-                        $matches = [];
-                        if (preg_match('#\\(([0-9]+)\\)#', $fieldInfo['Type'] ?? '', $matches)) {
-                            $localizationFieldLength = (int)($matches[1]);
+                        if ($fieldInfo['length'] ?? false) {
+                            $localizationFieldLength = (int)$fieldInfo['length'];
                             // Add the localization field
                             $connection = $connectionPool->getConnectionForTable($tableName);
-                            $column = new Column($localizationField, Type::getType(Type::STRING));
+                            $schemaManager = $connection->createSchemaManager();
+                            $tables = $schemaManager->listTables();
+                            $column = new Column($localizationField, Type::getType($fieldInfo['type']->lookupName($fieldInfo['type'])));
                             $column->setLength($localizationFieldLength)
                                 ->setNotnull(true)
                                 ->setDefault('');
-                            $tableDiff = new TableDiff($tableName, [$column]);
+                            $tableDiff = new TableDiff($tables[0], [$column]);
                             $query = $connection->getDatabasePlatform()->getAlterTableSQL($tableDiff);
-                            $connection->executeUpdate($query[0]);
+                            $connection->executeStatement($query[0]);
                         }
                     }
                 }
@@ -270,10 +271,10 @@ abstract class AbstractEntityRepository extends Repository
         $tableName = $dataMap->getTableName();
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $connection = $connectionPool->getConnectionForTable($tableName);
-        $query = $connection->getDatabasePlatform()->getListTableColumnsSQL($tableName, $connection->getDatabase());
-        $columnsInfo = $connection->executeQuery($query)->fetchAllAssociative();
-        foreach ($columnsInfo as $fieldRow) {
-            $fieldsInfo[$fieldRow['Field']] = $fieldRow;
+        $schemaManager = $connection->createSchemaManager();
+        $columns = $schemaManager->listTableColumns($tableName);
+        foreach ($columns as $column) {
+        	$fieldsInfo[$column->getName()] = $column->toArray();
         }
         return $fieldsInfo;
     }
@@ -314,7 +315,7 @@ abstract class AbstractEntityRepository extends Repository
             $rows = $queryBuilder
                 ->from($tableName)
                 ->executeQuery()
-                ->fetchAll();
+                ->fetchAllAssociative();
             foreach ($rows as $row) {
                 $set = [];
                 foreach ($row as $field => $value) {

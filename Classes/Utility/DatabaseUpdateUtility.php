@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2023 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Schema\SchemaMigrator;
 use TYPO3\CMS\Core\Database\Schema\SqlReader;
+use TYPO3\CMS\Core\Package\PackageActivationService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extensionmanager\Utility\InstallUtility;
@@ -75,7 +76,7 @@ class DatabaseUpdateUtility
             $connection = $connectionPool->getConnectionForTable($tableName);
             foreach ((array)$perTableStatements as $statement) {
                 try {
-                    $connection->executeUpdate($statement);
+                    $connection->executeStatement($statement);
                     $result[$statement] = '';
                 } catch (DBALException $e) {
                     $result[$statement] = $e->getPrevious()->getMessage();
@@ -103,7 +104,7 @@ class DatabaseUpdateUtility
             foreach (array_keys(LocalizationUtility::TABLES ?? []) as $tableName) {
                 $connection = $connectionPool->getConnectionForTable($tableName);
                 try {
-                    $connection->executeUpdate($connection->getDatabasePlatform()
+                    $connection->executeStatement($connection->getDatabasePlatform()
                         ->getDropTableSQL($connection->quoteIdentifier($tableName)));
                 } catch (TableNotFoundException $e) {
                     // Ignore table not found exception
@@ -111,8 +112,7 @@ class DatabaseUpdateUtility
             }
             // Re-create all tables
             $this->processDatabaseUpdates(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName));
-            $installTool = GeneralUtility::makeInstance(InstallUtility::class);
-            $installTool->importStaticSql($extTablesStaticSqlContent);
+            $this->importStaticSql($extTablesStaticSqlContent);
         }
     }
 
@@ -157,5 +157,19 @@ class DatabaseUpdateUtility
                 $schemaMigrator->migrate($sqlStatements, $selectedStatements);
                 $GLOBALS['TCA'] = $tcaBackup;
         }
+    }
+
+    /**
+     * Import static SQL data (normally used for ext_tables_static+adt.sql)
+     *
+     * @param string $rawDefinitions
+     */
+    public function importStaticSql($rawDefinitions)
+    {
+        $sqlReader = GeneralUtility::makeInstance(SqlReader::class);
+        $statements = $sqlReader->getStatementArray($rawDefinitions);
+
+        $schemaMigrationService = GeneralUtility::makeInstance(SchemaMigrator::class);
+        $schemaMigrationService->importStaticData($statements, true);
     }
 }

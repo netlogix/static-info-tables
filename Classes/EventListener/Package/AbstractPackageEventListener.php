@@ -28,6 +28,7 @@ use SJBR\StaticInfoTables\Cache\ClassCacheManager;
 use SJBR\StaticInfoTables\Utility\DatabaseUpdateUtility;
 use TYPO3\CMS\Core\Authentication\CommandLineUserAuthentication;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -73,8 +74,7 @@ abstract class AbstractPackageEventListener
         $classCacheManager->reBuild();
         if ($this->isUpdateRequired()) {
         	$flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-			$messageQueue = $flashMessageService->getMessageQueueByIdentifier('extbase.flashmessages.tx_extensionmanager_tools_extensionmanagerextensionmanager');
-			//extbase.flashmessages.tx_extensionmanager_tools_extensionmanagerextensionmanager
+			$messageQueue = $flashMessageService->getMessageQueueByIdentifier(FlashMessageQueue::NOTIFICATION_QUEUE);
 			// Process the database updates of this base extension (we want to re-process these updates every time the update script is invoked)
 			// unless there was no change in the version numbers of the static info tables and language packs installed
 			$extensionSitePath = ExtensionManagementUtility::extPath(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName));
@@ -83,7 +83,7 @@ abstract class AbstractPackageEventListener
 			}
 			$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateTables', $this->extensionName), '', ContextualFeedbackSeverity::OK, true);
 			if (!($GLOBALS['BE_USER'] instanceof CommandLineUserAuthentication)) {
-				$messageQueue->addMessage($message);
+				$messageQueue->enqueue($message);
 			}
 			$databaseUpdateUtility->importStaticSqlFile($extensionSitePath);
 			// Get the extensions which want to extend static_info_tables
@@ -101,7 +101,7 @@ abstract class AbstractPackageEventListener
 					}
 					$message = GeneralUtility::makeInstance(FlashMessage::class, LocalizationUtility::translate('updateLanguageLabels', $this->extensionName, [$extensionKey]), '', ContextualFeedbackSeverity::OK, true);
 					if (!($GLOBALS['BE_USER'] instanceof CommandLineUserAuthentication)) {
-						$messageQueue->addMessage($message);
+						$messageQueue->enqueue($message);
 					}
 				    $languagePackUpdated = true;
 				}

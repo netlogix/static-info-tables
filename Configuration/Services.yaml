@@ -9,18 +9,11 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
 
-  SJBR\StaticInfoTables\EventListener\Package\AfterPackageActivationEventListener:
+  SJBR\StaticInfoTables\EventListener\Package\PackageInitializationEventListener:
     tags:
       - name: event.listener
-        identifier: 'StaticInfoTables/Package/AfterPackageActivationEventLister'
-        event: TYPO3\CMS\Core\Package\Event\AfterPackageActivationEvent
-    public: true
-
-  SJBR\StaticInfoTables\EventListener\Package\AfterExtensionStaticDatabaseContentHasBeenImportedEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'StaticInfoTables/Package/AfterExtensionStaticDatabaseContentHasBeenImportedEventListener'
-        event: TYPO3\CMS\Extensionmanager\Event\AfterExtensionStaticDatabaseContentHasBeenImportedEvent
+        identifier: 'StaticInfoTables/Package/PackageInitializationEventListener'
+        event: TYPO3\CMS\Core\Package\Event\PackageInitializationEvent
     public: true
 
   SJBR\StaticInfoTables\EventListener\Backend\View\ModifyDatabaseQueryForRecordListingEventListener:

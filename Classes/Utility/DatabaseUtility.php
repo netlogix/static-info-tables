@@ -132,7 +132,7 @@ class DatabaseUtility implements SingletonInterface
             ->from($table)
             ->executeQuery();
         // Traverse the selected rows and dump each row as a line in the file:
-        while ($row = $result->fetch()) {
+        while ($row = $result->fetchAssociative()) {
             $values = [];
             foreach ($fieldStructure as $field => $structure) {
                 $values[] = isset($row[$field]) ? '\'' . str_replace($search, $replace, $row[$field]) . '\'' : 'NULL';

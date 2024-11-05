@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Repository;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,7 +37,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Extensionmanager\Utility\InstallUtility;
 
 class LanguagePackRepository extends Repository
 {
@@ -140,7 +139,6 @@ class LanguagePackRepository extends Repository
         if ($success) {
         	$cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         	$classCacheManager = new ClassCacheManager($cacheManager);
-        	$installUtility = GeneralUtility::makeInstance(InstallUtility::class);
             $installed = ExtensionManagementUtility::isLoaded($languagePackExtensionKey);
             if ($installed) {
                 $content[] =  LocalizationUtility::translate('languagePack', $this->extensionName)
@@ -148,10 +146,6 @@ class LanguagePackRepository extends Repository
                     . ' ' . LocalizationUtility::translate('languagePackUpdated', $this->extensionName);
             } else {
                 $content[] = LocalizationUtility::translate('languagePackCreated', $this->extensionName) . ' ' . $languagePack->getLanguage() . ' (' . $locale . ')';
-                $installUtility->install($languagePackExtensionKey);
-                $content[] = LocalizationUtility::translate('languagePack', $this->extensionName)
-                    . ' ' . $languagePackExtensionKey
-                    . ' ' . LocalizationUtility::translate('wasInstalled', $this->extensionName);
             }
             $classCacheManager->reBuild();
         }

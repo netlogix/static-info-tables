@@ -30,7 +30,8 @@
 			<target></target></trans-unit>
 			<trans-unit id="language" xml:space="preserve">
 				<source>Language of the language pack</source>
-			<target></target></trans-unit>
+			    <target state="translated">Langue du paquet de langue</target>
+			</trans-unit>
 			<trans-unit id="version" xml:space="preserve" approved="yes">
 				<source>Version of the language pack</source>
 			<target state="translated">Version du paquet de langue</target></trans-unit>
@@ -39,7 +40,7 @@
 			<target state="translated">Nom de l'auteur de l'extension</target></trans-unit>
 			<trans-unit id="authorCompany" xml:space="preserve">
 				<source>Name of company of extension author</source>
-			<target></target></trans-unit>
+			<target>Nom de la société de l'auteur de l'extension</target></trans-unit>
 			<trans-unit id="authorEmail" xml:space="preserve" approved="yes">
 				<source>Email of extension author</source>
 			<target state="translated">Adresse email de l'auteur de l'extension</target></trans-unit>
@@ -123,19 +124,24 @@
 			<target></target></trans-unit>
 			<trans-unit id="countryLocalizedName" xml:space="preserve">
 				<source>Country localized name</source>
-			<target></target></trans-unit>
+			    <target state="translated">Nom localisé du pays</target>
+			</trans-unit>
 			<trans-unit id="countryZoneLocalizedName" xml:space="preserve">
 				<source>Country subdivision localized name</source>
-			<target></target></trans-unit>
+				<target state="translated">Nom localisé de la subdivision de pays</target>
+			</trans-unit>
 			<trans-unit id="currencyLocalizedName" xml:space="preserve">
 				<source>Currency localized name</source>
-			<target></target></trans-unit>
+			    <target state="translated">Nom localisé de la devise</target>
+			</trans-unit>
 			<trans-unit id="languageLocalizedName" xml:space="preserve">
 				<source>Language localized name</source>
-			<target></target></trans-unit>
+			    <target state="translated">Nom localisé de la langue</target>
+			</trans-unit>
 			<trans-unit id="territoryLocalizedName" xml:space="preserve">
 				<source>Territory localized name</source>
-			<target></target></trans-unit>
+			    <target state="translated">Nom localisé du territoire</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\EventListener\Package;
 /*
  *  Copyright notice
  *
- *  (c) 2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2022-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -24,31 +24,39 @@ namespace SJBR\StaticInfoTables\EventListener\Package;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use TYPO3\CMS\Core\Package\Event\AfterPackageActivationEvent;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
+use TYPO3\CMS\Core\Package\Event\PackageInitializationEvent;
+use TYPO3\CMS\Core\Package\Initialization\ImportStaticSqlDataOnPackageInitialization;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
 /*
- * AfterPackageActivation event listener
+ * PackageInitializationEvent event listener
  *
- * Always run the extension update script except on first install of base extension
+ * Run the update script after base data was re-imported
  */
-class AfterPackageActivationEventListener extends AbstractPackageEventListener
+class PackageInitializationEventListener extends AbstractPackageEventListener
 {
     /**
      * If the installed extension is static_info_tables or a language pack, execute the update
      *
-     * @param AfterPackageActivationEvent $event
+     * @param PackageInitializationEvent $event
      * @return void
      */
-    public function __invoke(AfterPackageActivationEvent $event): void
+    #[AsEventListener(after: ImportStaticSqlDataOnPackageInitialization::class)]
+    public function __invoke(PackageInitializationEvent $event): void
     {
-        $extensionKey = $event->getPackageKey();
-        $packageType = $event->getType();
-        if ($packageType === 'typo3-cms-extension' && strpos($extensionKey, 'static_info_tables') === 0) {
+        $extensionKey = $event->getExtensionKey();
+        if (strpos($extensionKey, 'static_info_tables') === 0) {
             $extensionKeyParts = explode('_', $extensionKey);
             if (count($extensionKeyParts) === 3) {
-                $extTablesStaticSqlRelFile = PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath($extensionKey)) . 'ext_tables_static+adt.sql';
+                $extTablesStaticSqlFile = $event->getPackage()->getPackagePath() . 'ext_tables_static+adt.sql';
+                $extTablesStaticSqlRelFile = PathUtility::stripPathSitePrefix($extTablesStaticSqlFile);
+            }
+            if (
+                // Base extension with data already imported once
+                (count($extensionKeyParts) === 3 && $this->registry->get('extensionDataImport', $extTablesStaticSqlRelFile))
+            ) {
+                $this->registry->remove('static_info_tables', 'last_update_status');
             }
             if (
                 // Base extension with data already imported once
