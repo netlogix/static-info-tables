@@ -238,7 +238,7 @@ class LanguagePack extends AbstractEntity
         $localeUpperCase = strtoupper($this->getLocale());
         foreach ($parsedData['default'] as $translationElementId => $translationElement) {
             if (substr($translationElementId, -3) == '_en') {
-                $localizationLabels[] = chr(9) . chr(9) . chr(9) . '<trans-unit id="' . substr($translationElementId, 0, -2) . $localeLowerCase . '" xml:space="preserve">';
+                $localizationLabels[] = chr(9) . chr(9) . chr(9) . '<trans-unit id="' . substr($translationElementId, 0, -2) . $localeLowerCase . '" resname="' . substr($translationElementId, 0, -2) . $localeLowerCase . '" xml:space="preserve">';
                 $localizationLabels[] = chr(9) . chr(9) . chr(9) . chr(9) . '<source>' . str_replace('(EN)', '(' . $localeUpperCase . ')', $translationElement[0]['source']) . '</source>';
                 if ($translationElement[0]['target']) {
                     $localizationLabels[] = chr(9) . chr(9) . chr(9) . chr(9) . '<target>' . str_replace('(EN)', '(' . $localeUpperCase . ')', $translationElement[0]['target']) . '</target>';

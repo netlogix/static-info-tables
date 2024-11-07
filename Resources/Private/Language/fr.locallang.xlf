@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
-<xliff version="1.0">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-03-05T21:51:01Z" product-name="static_info_tables" target-language="fr">
 		<header/>
 		<body>
 			<trans-unit id="title" xml:space="preserve">
 				<source>Static Info Tables Manager</source>
 			<target></target></trans-unit>
-			<trans-unit id="information" xml:space="preserve" approved="yes">
+			<trans-unit id="information" xml:space="preserve">
 				<source>Information</source>
-			<target state="translated">Information</target></trans-unit>
+			<target>Information</target></trans-unit>
 			<trans-unit id="actionList" xml:space="preserve">
 				<source/>
 			</trans-unit>
@@ -30,35 +30,35 @@
 			<target></target></trans-unit>
 			<trans-unit id="language" xml:space="preserve">
 				<source>Language of the language pack</source>
-			    <target state="translated">Langue du paquet de langue</target>
+			    <target>Langue du paquet de langue</target>
 			</trans-unit>
-			<trans-unit id="version" xml:space="preserve" approved="yes">
+			<trans-unit id="version" xml:space="preserve">
 				<source>Version of the language pack</source>
-			<target state="translated">Version du paquet de langue</target></trans-unit>
-			<trans-unit id="author" xml:space="preserve" approved="yes">
+			<target>Version du paquet de langue</target></trans-unit>
+			<trans-unit id="author" xml:space="preserve">
 				<source>Name of extension author</source>
-			<target state="translated">Nom de l'auteur de l'extension</target></trans-unit>
+			<target>Nom de l'auteur de l'extension</target></trans-unit>
 			<trans-unit id="authorCompany" xml:space="preserve">
 				<source>Name of company of extension author</source>
 			<target>Nom de la société de l'auteur de l'extension</target></trans-unit>
-			<trans-unit id="authorEmail" xml:space="preserve" approved="yes">
+			<trans-unit id="authorEmail" xml:space="preserve">
 				<source>Email of extension author</source>
-			<target state="translated">Adresse email de l'auteur de l'extension</target></trans-unit>
-			<trans-unit id="couldNotWriteFile" xml:space="preserve" approved="yes">
+			<target>Adresse email de l'auteur de l'extension</target></trans-unit>
+			<trans-unit id="couldNotWriteFile" xml:space="preserve">
 				<source>The following file could not be written:</source>
-			<target state="translated">Le fichier suivi n'a pas pu être écrit :</target></trans-unit>
-			<trans-unit id="languagePackCreated" xml:space="preserve" approved="yes">
+			<target>Le fichier suivi n'a pas pu être écrit :</target></trans-unit>
+			<trans-unit id="languagePackCreated" xml:space="preserve">
 				<source>A language pack was created for</source>
-			<target state="translated">Un paquet de langue a été créé pour</target></trans-unit>
-			<trans-unit id="languagePackUpdated" xml:space="preserve" approved="yes">
+			<target>Un paquet de langue a été créé pour</target></trans-unit>
+			<trans-unit id="languagePackUpdated" xml:space="preserve">
 				<source>was updated.</source>
-			<target state="translated">a été mis à jour.</target></trans-unit>
-			<trans-unit id="languagePack" xml:space="preserve" approved="yes">
+			<target>a été mis à jour.</target></trans-unit>
+			<trans-unit id="languagePack" xml:space="preserve">
 				<source>Language pack</source>
-			<target state="translated">Paquet de langue</target></trans-unit>
-			<trans-unit id="wasInstalled" xml:space="preserve" approved="yes">
+			<target>Paquet de langue</target></trans-unit>
+			<trans-unit id="wasInstalled" xml:space="preserve">
 				<source>was installed.</source>
-			<target state="translated">a été installé.</target></trans-unit>
+			<target>a été installé.</target></trans-unit>
 			<trans-unit id="testForm" xml:space="preserve">
 				<source>Display the test form</source>
 			<target></target></trans-unit>
@@ -97,10 +97,12 @@
 			<target></target></trans-unit>
 			<trans-unit id="updateLanguageLabels" xml:space="preserve">
 				<source>The Static Info Tables were updated with language labels from language pack</source>
-			<target></target></trans-unit>
+			    <target>Les tables d'information statique ont été mises à jour avec les libellés du paquet de langue</target>
+			</trans-unit>
 			<trans-unit id="updateTables" xml:space="preserve">
 				<source>The Static Info Tables were re-created.</source>
-			<target></target></trans-unit>
+			    <target>Les tables d'information statique ont été re-créées.</target>
+			</trans-unit>
 			<trans-unit id="nothingToDo" xml:space="preserve">
 				<source>No update was necessary as no language pack is installed.</source>
 			<target></target></trans-unit>
@@ -115,32 +117,35 @@
 			<target></target></trans-unit>
 			<trans-unit id="selectCountry" xml:space="preserve">
 				<source>Select a country</source>
-			<target></target></trans-unit>
+			    <target>Choisissez un pays</target>
+			</trans-unit>
 			<trans-unit id="selectCountryZone" xml:space="preserve">
 				<source>Select a country subdivision</source>
-			<target></target></trans-unit>
+			    <target>Choisissez une subdivision de pays</target>
+			</trans-unit>
 			<trans-unit id="selectLanguage" xml:space="preserve">
 				<source>Select a language</source>
-			<target></target></trans-unit>
+			    <target>Choisissez une langue</target>
+			</trans-unit>
 			<trans-unit id="countryLocalizedName" xml:space="preserve">
 				<source>Country localized name</source>
-			    <target state="translated">Nom localisé du pays</target>
+			    <target>Nom localisé du pays</target>
 			</trans-unit>
 			<trans-unit id="countryZoneLocalizedName" xml:space="preserve">
 				<source>Country subdivision localized name</source>
-				<target state="translated">Nom localisé de la subdivision de pays</target>
+				<target>Nom localisé de la subdivision de pays</target>
 			</trans-unit>
 			<trans-unit id="currencyLocalizedName" xml:space="preserve">
 				<source>Currency localized name</source>
-			    <target state="translated">Nom localisé de la devise</target>
+			    <target>Nom localisé de la devise</target>
 			</trans-unit>
 			<trans-unit id="languageLocalizedName" xml:space="preserve">
 				<source>Language localized name</source>
-			    <target state="translated">Nom localisé de la langue</target>
+			    <target>Nom localisé de la langue</target>
 			</trans-unit>
 			<trans-unit id="territoryLocalizedName" xml:space="preserve">
 				<source>Territory localized name</source>
-			    <target state="translated">Nom localisé du territoire</target>
+			    <target>Nom localisé du territoire</target>
 			</trans-unit>
 		</body>
 	</file>

@@ -13,40 +13,40 @@
 			<trans-unit id="categories.staticInfoTables.addressFormat" resname="categories.staticInfoTables.addressFormat">
 				<source>Address Formats</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.defaultCountry" resname="settings.staticInfoTables.defaultCountry">
+			<trans-unit id="settings.staticinfotables.defaultCountry" resname="settings.staticinfotables.defaultCountry">
 				<source>Default country</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.defaultCountry" resname="settings.staticInfoTables.defaultCountry">
+			<trans-unit id="settings.description.staticinfotables.defaultCountry" resname="settings.description.staticinfotables.defaultCountry">
 				<source>ISO alpha-3 code of the default selected country in the drop-down selector</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.countriesAllowed" resname="settings.staticInfoTables.countriesAllowed">
+			<trans-unit id="settings.staticinfotables.countriesAllowed" resname="settings.staticinfotables.countriesAllowed">
 				<source>Allowed countries</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.countriesAllowed" resname="settings.staticInfoTables.countriesAllowed">
+			<trans-unit id="settings.description.staticinfotables.countriesAllowed" resname="settings.description.staticinfotables.countriesAllowed">
 				<source>ISO alpha-3 codes of the countries which are allowed in the drop-down selector. The order of the countries is preserved in the output.</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.defaultCountryZone" resname="settings.staticInfoTables.defaultCountryZone">
+			<trans-unit id="settings.staticinfotables.defaultCountryZone" resname="settings.staticinfotables.defaultCountryZone">
 				<source>Default country zone</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.defaultCountryZone" resname="settings.staticInfoTables.defaultCountryZone">
+			<trans-unit id="settings.description.staticinfotables.defaultCountryZone" resname="settings.description.staticinfotables.defaultCountryZone">
 				<source>Code of the default selected country zone in the drop-down selector</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.defaultLanguage" resname="settings.staticInfoTables.defaultLanguage">
+			<trans-unit id="settings.staticinfotables.defaultLanguage" resname="settings.staticinfotables.defaultLanguage">
 				<source>Default language</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.defaultLanguage" resname="settings.staticInfoTables.defaultLanguage">
+			<trans-unit id="settings.description.staticinfotables.defaultLanguage" resname="settings.description.staticinfotables.defaultLanguage">
 				<source>ISO alpha-2 code of the default selected language in the drop-down selector</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.defaultCurrency" resname="settings.staticInfoTables.defaultCurrency">
+			<trans-unit id="settings.staticinfotables.defaultCurrency" resname="settings.staticinfotables.defaultCurrency">
 				<source>Default currency</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.defaultCurrency" resname="settings.staticInfoTables.defaultCurrency">
+			<trans-unit id="settings.description.staticinfotables.defaultCurrency" resname="settings.description.staticinfotables.defaultCurrency">
 				<source>ISO alpha-3 code of the default currency used to format an amount</source>
 			</trans-unit>
-			<trans-unit id="settings.staticinfotables.onCountryChangeAttribute" resname="settings.staticInfoTables.onCountryChangeAttribute">
+			<trans-unit id="settings.staticinfotables.onCountryChangeAttribute" resname="settings.staticinfotables.onCountryChangeAttribute">
 				<source>Onchange script</source>
 			</trans-unit>
-			<trans-unit id="settings.description.staticinfotables.onCountryChangeAttribute" resname="settings.staticInfoTables.onCountryChangeAttribute">
+			<trans-unit id="settings.description.staticinfotables.onCountryChangeAttribute" resname="settings.description.staticinfotables.onCountryChangeAttribute">
 				<source>Script to be executed by the onChange event handler of the country selector</source>
 			</trans-unit>
 		</body>

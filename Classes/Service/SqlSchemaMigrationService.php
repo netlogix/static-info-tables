@@ -136,9 +136,9 @@ class SqlSchemaMigrationService
             // Add a default value if the field is not auto-incremented (these fields never have a default definition)
             if (!stristr($row['Extra'], 'auto_increment')) {
                 if ($row['Default'] === null) {
-                    $field[] = 'default NULL';
+                    $field[] = 'DEFAULT NULL';
                 } else {
-                    $field[] = 'default \'' . addslashes($row['Default']) . '\'';
+                    $field[] = 'DEFAULT \'' . addslashes($row['Default']) . '\'';
                 }
             }
         }
