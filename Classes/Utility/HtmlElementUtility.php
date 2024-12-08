@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2023 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2024 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -51,10 +51,10 @@ class HtmlElementUtility
     {
         $selector = '';
         if (is_array($items) && count($items) > 0) {
-            $idAttribute = (trim($id)) ? 'id="' . htmlspecialchars(trim($id)) . '" ' : '';
-            $nameAttribute = (trim($name)) ? 'name="' . htmlspecialchars(trim($name)) . '" ' : '';
-            $titleAttribute = (trim($title)) ? 'title="' . htmlspecialchars(trim($title)) . '" ' : '';
-            $classAttribute = (trim($class)) ? 'class="' . htmlspecialchars(trim($class)) . '" ' : '';
+            $idAttribute = (trim($id ?? '')) ? 'id="' . htmlspecialchars(trim($id ?? '')) . '" ' : '';
+            $nameAttribute = (trim($name ?? '')) ? 'name="' . htmlspecialchars(trim($name ?? '')) . '" ' : '';
+            $titleAttribute = (trim($title ?? '')) ? 'title="' . htmlspecialchars(trim($title ?? '')) . '" ' : '';
+            $classAttribute = (trim($class ?? '')) ? 'class="' . htmlspecialchars(trim($class ?? '')) . '" ' : '';
 
             if ($onChange) {
                 $onChangeScript = '
