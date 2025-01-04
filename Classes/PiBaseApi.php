@@ -347,18 +347,18 @@ class PiBaseApi
         foreach ($prefixedTitleFields as $titleField) {
             $queryBuilder->addSelect($titleField);
         }
+        $whereExpressions = [];
         if ($param === 'UN') {
-            $queryBuilder->where($queryBuilder->expr()->eq('cn_uno_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT)));
+            $whereExpressions[] = $queryBuilder->expr()->eq('cn_uno_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT));
         } elseif ($param === 'EU') {
-            $queryBuilder->where($queryBuilder->expr()->eq('cn_eu_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT)));
+            $whereExpressions[] = $queryBuilder->expr()->eq('cn_eu_member', $queryBuilder->createNamedParameter(1, Connection::PARAM_INT));
         }
         if ($addWhere) {
             $addWhere = QueryHelper::stripLogicalOperatorPrefix($addWhere);
-            if (empty($queryBuilder->getQueryPart('where'))) {
-                $queryBuilder->where($addWhere);
-            } else {
-                $queryBuilder->andWhere($addWhere);
-            }
+            $whereExpressions[] = $addWhere;
+        }
+        if (!empty($whereExpressions)) {
+        	$queryBuilder->where(...$whereExpressions);
         }
         $query = $queryBuilder->executeQuery();
         while ($row = $query->fetchAssociative()) {
