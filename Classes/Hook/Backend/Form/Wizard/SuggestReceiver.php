@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Hook\Backend\Form\Wizard;
  *  Copyright notice
  *
  *  (c) 2007-2011 Andreas Wolf <andreas.wolf@ikt-werk.de>
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2025 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,10 +46,8 @@ class SuggestReceiver extends SuggestWizardDefaultReceiver
     /**
      * Prepare the statement for selecting the records which will be returned to the selector. May also return some
      * other records (e.g. from a mm-table) which will be used later on to select the real records
-     *
-     * @return void
      */
-    protected function prepareSelectStatement()
+    protected function prepareSelectStatement(): void
     {
         $expressionBuilder = $this->queryBuilder->expr();
         $searchWholePhrase = !isset($this->config['searchWholePhrase']) || $this->config['searchWholePhrase'];
