@@ -66,6 +66,7 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function getNameLocalized()
     {
         $language = LocalizationUtility::getCurrentLanguage();
+        $language = LocalizationUtility::getIsoLanguageKey($language);
         $labelFields = LocalizationUtility::getLabelFields($this->tableName, $language);
         foreach ($labelFields as $labelField => $map) {
             if ($this->_hasProperty($map['mapOnProperty'] ?? '')) {
