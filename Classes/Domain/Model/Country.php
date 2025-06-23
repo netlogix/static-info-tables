@@ -5,7 +5,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2011-2012 Armin Rüdiger Vieweg <info@professorweb.de>
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2025 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,6 +27,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 
 use SJBR\StaticInfoTables\Domain\Model\CountryZone;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -48,11 +49,12 @@ class Country extends AbstractEntity
 
     /**
      * Country zones of this country
+     * Needs to be public in some contexts due to the way LazyLoading is handled by Extbase
      *
      * @var ObjectStorage<CountryZone>
      */
     #[Extbase\ORM\Lazy()]
-    protected $countryZones;
+    public ObjectStorage $countryZones;
 
     /**
      * Currency code as number (i.e. 978)
@@ -593,8 +595,7 @@ class Country extends AbstractEntity
     /**
      * Sets the country zones
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone> $countryZones
-     *
+     * @param ObjectStorage<CountryZone> $countryZones
      * @return void
      */
     public function setCountryZones($countryZones)
@@ -605,9 +606,9 @@ class Country extends AbstractEntity
     /**
      * Gets the country zones
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\SJBR\StaticInfoTables\Domain\Model\CountryZone> $countryZones
+     * @return ObjectStorage<CountryZone>
      */
-    public function getCountryZones()
+    public function getCountryZones(): ObjectStorage
     {
         return $this->countryZones;
     }

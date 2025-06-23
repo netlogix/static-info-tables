@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Controller;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2025 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -254,7 +254,7 @@ class ManagerController extends ActionController
      *
      * @param LanguagePack $languagePack
      */
-    public function newLanguagePackAction(LanguagePack $languagePack = null): ResponseInterface
+    public function newLanguagePackAction(LanguagePack|null $languagePack = null): ResponseInterface
     {
         if (!is_object($languagePack)) {
             $languagePack = new LanguagePack();
@@ -316,7 +316,7 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormAction(Country $country = null, CountryZone $countryZone = null, Language $language = null): ResponseInterface
+    public function testFormAction(Country|null $country = null, CountryZone|null $countryZone = null, Language|null $language = null): ResponseInterface
     {
         if (is_object($country) && (is_object($countryZone) || !$country->getCountryZones()->count())) {
             return (new ForwardResponse('testFormResult'))
@@ -343,7 +343,7 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormResultAction(Country $country = null, CountryZone $countryZone = null, Language $language = null): ResponseInterface
+    public function testFormResultAction(Country|null $country = null, CountryZone|null $countryZone = null, Language|null $language = null): ResponseInterface
     {
         $this->moduleTemplate->assign('country', $country);
         $currencies = $this->currencyRepository->findByCountry($country);

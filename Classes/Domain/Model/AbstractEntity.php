@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2023 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2025 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -65,7 +65,8 @@ class AbstractEntity extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getNameLocalized()
     {
-        $language = LocalizationUtility::getCurrentLanguage();
+    	$language = LocalizationUtility::getCurrentLanguage();
+        $language = LocalizationUtility::getIsoLanguageKey($language);
         $labelFields = LocalizationUtility::getLabelFields($this->tableName, $language);
         foreach ($labelFields as $labelField => $map) {
             if ($this->_hasProperty($map['mapOnProperty'] ?? '')) {
