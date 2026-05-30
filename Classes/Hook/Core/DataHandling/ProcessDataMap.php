@@ -24,6 +24,8 @@ namespace SJBR\StaticInfoTables\Hook\Core\DataHandling;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use SJBR\StaticInfoTables\Domain\Model\Country;
+use SJBR\StaticInfoTables\Domain\Model\Territory;
 use SJBR\StaticInfoTables\Domain\Repository\CountryRepository;
 use SJBR\StaticInfoTables\Domain\Repository\CurrencyRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
@@ -35,25 +37,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ProcessDataMap
 {
-    protected $countryRepository;
-
-    public function injectCountryRepository(CountryRepository $countryRepository)
-    {
-        $this->countryRepository = $countryRepository;
-    }
-    protected $currencyRepository;
-
-    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
-    {
-        $this->currencyRepository = $currencyRepository;
-    }
-
-    protected $territoryRepository;
-
-    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
-    {
-        $this->territoryRepository = $territoryRepository;
-    }
+    public function __construct(
+        private readonly CountryRepository $countryRepository,
+        private readonly CurrencyRepository $currencyRepository,
+        private readonly TerritoryRepository $territoryRepository,
+    ) {}
 
     /**
      * Post-process redundant ISO codes fields
@@ -64,14 +52,13 @@ class ProcessDataMap
      * @param mixed $id
      * @return void
      */
-    public function processDatamap_postProcessFieldArray($status, $table, $id, &$incomingFieldArray, &$fObj)
+    public function processDatamap_postProcessFieldArray(mixed $status, string $table, mixed $id, array &$incomingFieldArray, mixed &$fObj): void
     {
         switch ($table) {
             case 'static_territories':
-                //Post-process containing territory ISO numeric code
                 if ($incomingFieldArray['tr_parent_territory_uid'] ?? 0) {
-                    $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['tr_parent_territory_uid']);
-                    if (is_object($territory)) {
+                    $territory = $this->territoryRepository->findByUid((int)$incomingFieldArray['tr_parent_territory_uid']);
+                    if ($territory instanceof Territory) {
                         $incomingFieldArray['tr_parent_iso_nr'] = $territory->getUnCodeNumber();
                     }
                 } elseif (isset($incomingFieldArray['tr_parent_territory_uid'])) {
@@ -79,19 +66,17 @@ class ProcessDataMap
                 }
                 break;
             case 'static_countries':
-                //Post-process containing territory ISO numeric code
                 if ($incomingFieldArray['cn_parent_territory_uid'] ?? 0) {
-                    $territory = $this->territoryRepository->findOneByUid((int)$incomingFieldArray['cn_parent_territory_uid']);
-                    if (is_object($territory)) {
+                    $territory = $this->territoryRepository->findByUid((int)$incomingFieldArray['cn_parent_territory_uid']);
+                    if ($territory instanceof Territory) {
                         $incomingFieldArray['cn_parent_tr_iso_nr'] = $territory->getUnCodeNumber();
                     }
                 } elseif (isset($incomingFieldArray['cn_parent_territory_uid'])) {
                     $incomingFieldArray['cn_parent_tr_iso_nr'] = 0;
                 }
-                //Post-process currency ISO numeric and A3 codes
                 if ($incomingFieldArray['cn_currency_uid'] ?? 0) {
-                    $currency = $this->currencyRepository->findOneByUid((int)$incomingFieldArray['cn_currency_uid']);
-                    if (is_object($currency)) {
+                    $currency = $this->currencyRepository->findByUid((int)$incomingFieldArray['cn_currency_uid']);
+                    if ($currency !== null) {
                         $incomingFieldArray['cn_currency_iso_nr'] = $currency->getIsoCodeNumber();
                         $incomingFieldArray['cn_currency_iso_3'] = $currency->getIsoCodeA3();
                     }
@@ -103,43 +88,29 @@ class ProcessDataMap
         }
     }
 
-    /**
-     * Post-process redundant ISO codes fields of IRRE child
-     *
-     * @param object $fobj TCEmain object reference
-     * @param mixed $status
-     * @param mixed $table
-     * @param mixed $id
-     * @return void
-     */
-    public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, &$fObj)
+    public function processDatamap_afterDatabaseOperations(string $status, string $table, mixed $id, array &$fieldArray, mixed &$fObj): void
     {
-        switch ($table) {
-            case 'static_countries':
-                //Post-process country ISO numeric, A2 and A3 codes on country zones
-                // Get the country record uid
-                if ($status === 'new') {
-                    $id = $fObj->substNEWwithIDs[$id];
-                }
-                // Get the country
-                $country = $this->countryRepository->findOneByUid((int)$id);
-                // Get the country zones
-                $countryZones = $country->getCountryZones()->toArray();
-                if (count($countryZones)) {
-                    $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('static_country_zones');
-                    foreach ($countryZones as $countryZone) {
-                        $connection->update(
-                            'static_country_zones',
-                            [
-                                'zn_country_iso_nr' => (int)$country->getIsoCodeNumber(),
-                                'zn_country_iso_2' => $country->getIsoCodeA2(),
-                                'zn_country_iso_3' => $country->getIsoCodeA3(),
-                            ],
-                            ['uid' => (int)$countryZone->getUid()]
-                        );
-                    }
-                }
-                break;
+        if ($table !== 'static_countries') {
+            return;
+        }
+        if ($status === 'new') {
+            $id = $fObj->substNEWwithIDs[$id];
+        }
+        $country = $this->countryRepository->findByUid((int)$id);
+        $countryZones = $country->getCountryZones()->toArray();
+        if ($countryZones !== []) {
+            $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('static_country_zones');
+            foreach ($countryZones as $countryZone) {
+                $connection->update(
+                    'static_country_zones',
+                    [
+                        'zn_country_iso_nr' => (int)$country->getIsoCodeNumber(),
+                        'zn_country_iso_2' => $country->getIsoCodeA2(),
+                        'zn_country_iso_3' => $country->getIsoCodeA3(),
+                    ],
+                    ['uid' => (int)$countryZone->getUid()]
+                );
+            }
         }
     }
 }

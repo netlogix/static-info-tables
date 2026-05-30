@@ -28,7 +28,6 @@ namespace SJBR\StaticInfoTables\Utility;
 use Psr\Http\Message\ServerRequestInterface;
 use SJBR\StaticInfoTables\Domain\Model\Language;
 use SJBR\StaticInfoTables\Domain\Repository\LanguageRepository;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
@@ -37,7 +36,6 @@ use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Localization helper which should be used to fetch localized labels for static info entities.
@@ -158,7 +156,7 @@ class LocalizationUtility
             $whereCount = 0;
             if ($identifiers['uid'] ?? false) {
                 $queryBuilder->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$identifiers['uid']), Connection::PARAM_INT)
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter((int)$identifiers['uid'], Connection::PARAM_INT))
                 );
                 $whereCount++;
             } elseif (!empty($identifiers['iso'])) {
@@ -235,7 +233,7 @@ class LocalizationUtility
                     $cleanedLabelFields[$labelField] = ['mapOnProperty' => $property];
                 }
                 // Add fields for alternative languages
-                if (strpos($field, '##') !== false && count($alternativeLanguages)) {
+                if (str_contains($field, '##') && count($alternativeLanguages)) {
                     foreach ($alternativeLanguages as $language) {
                         $labelField = str_replace('##', strtolower($language), $field);
                         $property = str_replace('##', ucfirst(strtolower($language)), $map['mapOnProperty']);
@@ -342,16 +340,9 @@ class LocalizationUtility
         if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()
         ) {
-            $tsfe = static::getTypoScriptFrontendController();
             $siteLanguage = self::getCurrentSiteLanguage();
-            // Get values from site language, which takes precedence over TypoScript settings
             if ($siteLanguage instanceof SiteLanguage) {
                 self::$languageKey = $siteLanguage->getTypo3Language();
-            } elseif (isset($tsfe->config['config']['language'])) {
-                self::$languageKey = $tsfe->config['config']['language'];
-            }
-            if (isset($tsfe->config['config']['language_alt'])) {
-                self::$alternativeLanguageKeys[] = $tsfe->config['config']['language_alt'];
             }
             if (empty(self::$alternativeLanguageKeys)) {
                 $locales = GeneralUtility::makeInstance(Locales::class);
@@ -422,18 +413,7 @@ class LocalizationUtility
         return null;
     }
 
-    /**
-     * @return TypoScriptFrontendController
-     */
-    protected static function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller');
-    }
-
-    /**
-     * @return LanguageService
-     */
-    protected static function getLanguageService()
+    protected static function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
     }

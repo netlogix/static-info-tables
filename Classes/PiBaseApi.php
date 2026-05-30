@@ -553,11 +553,11 @@ class PiBaseApi
         // Fetching the currency record
         $this->currencyInfo['cu_iso_3'] = trim($currencyCode);
         $this->currencyInfo['cu_iso_3'] = $this->currencyInfo['cu_iso_3'] ?: $this->currency;
-        $currency = $this->currencyRepository->findOneByIsoCodeA3($this->currencyInfo['cu_iso_3']);
+        $currency = $this->currencyRepository->findOneBy(['isoCodeA3' => $this->currencyInfo['cu_iso_3']]);
         // If not found we fetch the default currency!
         if (!($currency instanceof Currency)) {
             $this->currencyInfo['cu_iso_3'] = $this->currency;
-            $currency = $this->currencyRepository->findOneByIsoCodeA3($this->currencyInfo['cu_iso_3']);
+            $currency = $this->currencyRepository->findOneBy(['isoCodeA3' => $this->currencyInfo['cu_iso_3']]);
         }
         if ($currency instanceof Currency) {
             $this->currencyInfo['cu_name'] = $this->getStaticInfoName('CURRENCIES', $this->currencyInfo['cu_iso_3']);
@@ -618,7 +618,7 @@ class PiBaseApi
         $countryName = $this->getStaticInfoName('COUNTRIES', $countryCode);
         if ($countryName) {
             // Get address format
-            $country = $this->countryRepository->findOneByIsoCodeA3($countryCode);
+            $country = $this->countryRepository->findOneBy(['isoCodeA3' => $countryCode]);
             if (is_object($country)) {
                 $addressFormat = $country->getAddressFormat();
                 // Get country subdivision name

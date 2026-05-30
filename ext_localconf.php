@@ -1,36 +1,28 @@
 <?php
 defined('TYPO3') or die();
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use SJBR\StaticInfoTables\Cache\ClassCacheManager;
+use SJBR\StaticInfoTables\Hook\Core\DataHandling\ProcessDataMap;
+use TYPO3\CMS\Core\Cache\Backend\FileBackend;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 
-call_user_func(
-    function ($extKey) {
-        // Get the extensions's configuration
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get($extKey);
-        // Register cache static_info_tables
-        if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey]) ||
-        	!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey] = [];
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey]['groups'] = ['all'];
-        }
-        if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['static_info_tables']['frontend'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey]['frontend'] =
-                \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend::class;
-        }
-        if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['static_info_tables']['backend'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$extKey]['backend'] =
-                \TYPO3\CMS\Core\Cache\Backend\FileBackend::class;
-        }
-        // Configure clear cache post processing for extended domain model
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc']['static_info_tables'] =
-            \SJBR\StaticInfoTables\Cache\ClassCacheManager::class . '->reBuild';
-        // Add data handling hook to manage ISO codes redundancies on records
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] =
-            \SJBR\StaticInfoTables\Hook\Core\DataHandling\ProcessDataMap::class;
-        // Add global fluid namespace
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sit'][] = 'SJBR\\StaticInfoTables\\ViewHelpers';
-    },
-    'static_info_tables'
-);
+$cacheKey = 'static_info_tables';
+
+if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheKey])
+    || !is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheKey])
+) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheKey] = [
+        'groups' => ['all'],
+    ];
+}
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheKey]['frontend']
+    ??= PhpFrontend::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheKey]['backend']
+    ??= FileBackend::class;
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][$cacheKey]
+    = ClassCacheManager::class . '->reBuild';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][]
+    = ProcessDataMap::class;
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['sit'][] = 'SJBR\\StaticInfoTables\\ViewHelpers';

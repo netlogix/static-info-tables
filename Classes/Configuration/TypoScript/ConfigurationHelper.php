@@ -61,7 +61,7 @@ class ConfigurationHelper
                 $countryCode = $this->getConfiguredCountryCode();
                 if ($countryCode) {
                     $countryRepository = GeneralUtility::makeInstance(CountryRepository::class);
-                    $country = $countryRepository->findOneByIsoCodeA3($countryCode);
+                    $country = $countryRepository->findOneBy(['isoCodeA3' => $countryCode]);
                     if (is_object($country)) {
                         $entities = $repository->findByCountryOrderedByLocalizedName($country);
                     }

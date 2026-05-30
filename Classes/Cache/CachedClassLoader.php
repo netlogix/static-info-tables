@@ -28,7 +28,7 @@ namespace SJBR\StaticInfoTables\Cache;
  */
 
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -80,26 +80,23 @@ class CachedClassLoader
      * @param string $className Class name
      * @return void
      */
-    public static function autoload($className)
+    public static function autoload(string $className): void
     {
         $className = ltrim($className, '\\');
-        if (strpos($className, static::$namespace) !== false) {
-            // Lookup the class in the array of static info entities and check its presence in the class cache
-            // ClassCacheManager instantiation creates the class cache if not already available
-            $classCacheManager = GeneralUtility::makeInstance(ClassCacheManager::class);
-            $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-            $classCache = $cacheManager->getCache(static::$extensionKey);
-            $entities = ClassCacheManager::ENTITIES;
-            foreach ($entities as $entity) {
-                if ($className === static::$namespace . $entity) {
-                    $entryIdentifier = 'DomainModel' . $entity;
-                    if (!$classCache->has($entryIdentifier)) {
-                        // The class cache needs to be rebuilt
-                        $classCacheManager->reBuild();
-                    }
-                    $classCache->requireOnce($entryIdentifier);
-                    break;
+        if (!str_contains($className, static::$namespace)) {
+            return;
+        }
+        $classCacheManager = GeneralUtility::makeInstance(ClassCacheManager::class);
+        /** @var PhpFrontend $classCache */
+        $classCache = GeneralUtility::makeInstance(CacheManager::class)->getCache(static::$extensionKey);
+        foreach (ClassCacheManager::ENTITIES as $entity) {
+            if ($className === static::$namespace . $entity) {
+                $entryIdentifier = "DomainModel{$entity}";
+                if (!$classCache->has($entryIdentifier)) {
+                    $classCacheManager->reBuild();
                 }
+                $classCache->requireOnce($entryIdentifier);
+                break;
             }
         }
     }
