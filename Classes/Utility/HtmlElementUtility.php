@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013-2024 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2026 StanislasRolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is
@@ -28,7 +28,7 @@ namespace SJBR\StaticInfoTables\Utility;
  */
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Domain\ConsumableString;
+use TYPO3\CMS\Core\Security\ContentSecurityPolicy\ConsumableNonce;
 
 class HtmlElementUtility
 {
@@ -83,7 +83,7 @@ class HtmlElementUtility
             $selector .= '</select>' . LF;
             if ($onChangeScript) {
 				$nonceAttribute = self::getRequest()->getAttribute('nonce');
-				if ($nonceAttribute instanceof ConsumableString) {
+				if ($nonceAttribute instanceof ConsumableNonce) {
 					$nonce = $nonceAttribute->consume();
 				}
 				$selector .= '<script' . (isset($nonce) ? (' nonce="' . $nonce . '"') : '') . '>' . $onChangeScript .'</script>';
