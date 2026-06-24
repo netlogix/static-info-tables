@@ -9,13 +9,6 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
 
-  SJBR\StaticInfoTables\EventListener\Package\PackageInitializationEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'StaticInfoTables/Package/PackageInitializationEventListener'
-        event: TYPO3\CMS\Core\Package\Event\PackageInitializationEvent
-    public: true
-
   SJBR\StaticInfoTables\EventListener\Backend\View\ModifyDatabaseQueryForRecordListingEventListener:
     tags:
       - name: event.listener
