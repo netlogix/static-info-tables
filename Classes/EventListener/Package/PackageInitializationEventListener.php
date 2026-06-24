@@ -48,19 +48,9 @@ class PackageInitializationEventListener extends AbstractPackageEventListener
         $extensionKey = $event->getExtensionKey();
         if (strpos($extensionKey, 'static_info_tables') === 0) {
             $extensionKeyParts = explode('_', $extensionKey);
-            if (count($extensionKeyParts) === 3) {
-                $extTablesStaticSqlFile = $event->getPackage()->getPackagePath() . 'ext_tables_static+adt.sql';
-                $extTablesStaticSqlRelFile = PathUtility::stripPathSitePrefix($extTablesStaticSqlFile);
-            }
             if (
-                // Base extension with data already imported once
-                (count($extensionKeyParts) === 3 && $this->registry->get('extensionDataImport', $extTablesStaticSqlRelFile))
-            ) {
-                $this->registry->remove('static_info_tables', 'last_update_status');
-            }
-            if (
-                // Base extension with data already imported once
-                (count($extensionKeyParts) === 3 && $this->registry->get('extensionDataImport', $extTablesStaticSqlRelFile))
+                // Base extension
+                (count($extensionKeyParts) === 3)
                 // Language pack
                 || (count($extensionKeyParts) === 4 && strlen($extensionKeyParts[3]) === 2)
                 || (count($extensionKeyParts) === 5 && strlen($extensionKeyParts[3]) === 2 && strlen($extensionKeyParts[4]) === 2)
