@@ -6,12 +6,15 @@
 		<body>
 			<trans-unit id="label" resname="label">
 				<source>Static Info Tables</source>
+				<target>Static Info Tables</target>
 			</trans-unit>
 			<trans-unit id="categories.staticInfoTables" resname="categories.staticInfoTables">
 				<source>Static Info Tables</source>
+				<target>Static Info Tables</target>
 			</trans-unit>
 			<trans-unit id="categories.staticInfoTables.addressFormat" resname="categories.staticInfoTables.addressFormat">
 				<source>Address Formats</source>
+				<target>Formats d'adresse</target>
 			</trans-unit>
 			<trans-unit id="settings.staticinfotables.defaultCountry" resname="settings.staticinfotables.defaultCountry">
 				<source>Default country</source>

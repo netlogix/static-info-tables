@@ -105,6 +105,9 @@ class LanguagePackRepository extends Repository
         $typo3VersionRange = VersionNumberUtility::splitVersionRange($languagePack->getTypo3VersionRange());
         $typo3VersionMinArray = VersionNumberUtility::convertVersionStringToArray($typo3VersionRange[0]);
         $typo3VersionMaxArray = VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::raiseVersionNumber('main', $typo3VersionRange[1]));
+        $baseExtensionVersion = ExtensionManagementUtility::getExtensionVersion(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName));
+        $baseExtensionVersionArray = VersionNumberUtility::convertVersionStringToArray($baseExtensionVersion);
+        
         // Set markers replacement values
         $replace = [
             '###LANG_ISO_LOWER###' => $localeLowerCase,
@@ -119,7 +122,7 @@ class LanguagePackRepository extends Repository
             '###AUTHOR_EMAIL###' => $languagePack->getAuthorEmail(),
             '###AUTHOR_COMPANY###' => $languagePack->getAuthorCompany(),
             '###VENDOR_NAME###' => $languagePack->getVendorName(),
-            '###VERSION_BASE###' => ExtensionManagementUtility::getExtensionVersion(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)),
+            '###VERSION_BASE###' => $baseExtensionVersionArray['version_main'] . '.' . $baseExtensionVersionArray['version_sub'],
             '###LANG_TCA_LABELS###' => $languagePack->getLocalizationLabels(),
             '###LANG_SQL_UPDATE###' => $languagePack->getUpdateQueries(),
         ];

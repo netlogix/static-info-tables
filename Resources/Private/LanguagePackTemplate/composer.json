@@ -13,17 +13,25 @@
     "TYPO3",
     "Static Info Tables"
   ],
-  "replace": {
-    "###VENDOR_NAME###/static-info-tables-###LANG_ISO_LOWER###": "self.version",
-    "typo3-ter/static-info-tables-###LANG_ISO_LOWER###": "self.version"
-  },
   "require": {
-    "typo3/cms-core": ">=###TYPO3_VERSION_MIN###,<###TYPO3_VERSION_MAX###",
+    "typo3/cms-core": "###TYPO3_VERSION_RANGE###",
     "sjbr/static-info-tables": "^###VERSION_BASE###"
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "static_info_tables_###LANG_ISO_LOWER###"
+      "extension-key": "static_info_tables_###LANG_ISO_LOWER###",
+      "version": "###VERSION###",
+      "Package": {
+		"providesPackages": {}
+	  }
     }
+  },
+  "scripts": {
+	"post-install-cmd": [
+	  "vendor/bin/typo3 extension:setup --extension=static_info_tables_###LANG_ISO_LOWER###"
+	],
+	"post-update-cmd": [
+	  "vendor/bin/typo3 extension:setup --extension=static_info_tables_###LANG_ISO_LOWER###"
+	]
   }
 }

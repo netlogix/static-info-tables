@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Controller;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2026 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,11 +39,13 @@ use SJBR\StaticInfoTables\Domain\Repository\LanguagePackRepository;
 use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use SJBR\StaticInfoTables\Utility\LocaleUtility;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Module\ModuleData;
 use TYPO3\CMS\Backend\Module\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Package\MetaData;
@@ -54,11 +56,11 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Extensionmanager\Utility\EmConfUtility;
 
 /**
  * Static Info Tables Manager controller
  */
+#[AsController]
 class ManagerController extends ActionController
 {
     /**
@@ -85,102 +87,6 @@ class ManagerController extends ActionController
     ];
 
     /**
-     * @var CountryRepository
-     */
-    protected $countryRepository;
-
-    /**
-     * Dependency injection of the Country Repository
-     *
-     * @param CountryRepository $countryRepository
-     * @return void
-     */
-    public function injectCountryRepository(CountryRepository $countryRepository)
-    {
-        $this->countryRepository = $countryRepository;
-    }
-
-    /**
-     * @var CountryZoneRepository
-     */
-    protected $countryZoneRepository;
-
-    /**
-     * Dependency injection of the Country Zone Repository
-     *
-     * @param CountryZoneRepository $countryZoneRepository
-     * @return void
-     */
-    public function injectCountryZoneRepository(CountryZoneRepository $countryZoneRepository)
-    {
-        $this->countryZoneRepository = $countryZoneRepository;
-    }
-
-    /**
-     * @var CurrencyRepository
-     */
-    protected $currencyRepository;
-
-    /**
-     * Dependency injection of the Currency Repository
-     *
-     * @param CurrencyRepository $currencyRepository
-     * @return void
-     */
-    public function injectCurrencyRepository(CurrencyRepository $currencyRepository)
-    {
-        $this->currencyRepository = $currencyRepository;
-    }
-
-    /**
-     * @var LanguageRepository
-     */
-    protected $languageRepository;
-
-    /**
-     * Dependency injection of the Language Repository
-     *
-     * @param LanguageRepository $languageRepository
-     * @return void
-     */
-    public function injectLanguageRepository(LanguageRepository $languageRepository)
-    {
-        $this->languageRepository = $languageRepository;
-    }
-
-    /**
-     * @var TerritoryRepository
-     */
-    protected $territoryRepository;
-
-    /**
-     * Dependency injection of the Territory Repository
-     *
-     * @param TerritoryRepository $territoryRepository
-     * @return void
-     */
-    public function injectTerritoryRepository(TerritoryRepository $territoryRepository)
-    {
-        $this->territoryRepository = $territoryRepository;
-    }
-
-    /**
-     * @var ModuleTemplateFactory
-     */
-    protected $moduleTemplateFactory;
-
-    /**
-     * Dependency injection of the Module Template Factory
-     *
-     * @param ModuleTemplateFactory $moduleTemplateFactory
-     * @return void
-     */
-    public function injectModuleTemplateFactory(ModuleTemplateFactory $moduleTemplateFactory)
-    {
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
-    }
-
-    /**
      * Module data
      *
      * @var ModuleData
@@ -194,6 +100,18 @@ class ManagerController extends ActionController
      */
     protected $moduleTemplate;
 
+    public function __construct(
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        protected UriBuilder $uriBuilder,
+        private ComponentFactory $componentFactory,
+        protected CountryRepository $countryRepository,
+        protected CountryZoneRepository $countryZoneRepository,
+        protected CurrencyRepository $currencyRepository,
+        protected LanguageRepository $languageRepository,
+        protected TerritoryRepository $territoryRepository
+    ) {
+    }
+
     /**
      * Init module state.
      * This isn't done within __construct() since the controller
@@ -204,7 +122,6 @@ class ManagerController extends ActionController
     {
         $this->moduleData = $this->request->getAttribute('moduleData');
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $this->uriBuilder->setRequest($this->request);
         $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf:mlang_labels_tablabel'));
         $this->moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
@@ -216,17 +133,20 @@ class ManagerController extends ActionController
      */
     protected function makeFunctionMenu(): void
     {
-        $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menuRegistry = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry();
+        $menu = $this->componentFactory->createMenu();
         $menu->setIdentifier('ManagerFunctionMenu');
-        $menuItem = $menu->makeMenuItem()
+
+        $menuItem = $this->componentFactory->createMenuItem()
             ->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang.xlf:information'))
             ->setHref($this->uriBuilder->uriFor('information'));
         if ($this->request->getControllerActionName() === 'information') {
         	$menuItem->setActive(true);
         }
         $menu->addMenuItem($menuItem);
+
         foreach ($this->actions as $action) {
-            $menuItem = $menu->makeMenuItem()
+            $menuItem = $this->componentFactory->createMenuItem()
                 ->setTitle(LocalizationUtility::translate('LLL:EXT:static_info_tables/Resources/Private/Language/locallang.xlf:' . $action['title']))
                 ->setHref($this->uriBuilder->uriFor($action['code']));
 				if ($this->request->getControllerActionName() === $action['code']) {
@@ -237,7 +157,7 @@ class ManagerController extends ActionController
 				}
             $menu->addMenuItem($menuItem);
         }
-        $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+        $menuRegistry->addMenu($menu);
     }
 
     /**
@@ -254,7 +174,7 @@ class ManagerController extends ActionController
      *
      * @param LanguagePack $languagePack
      */
-    public function newLanguagePackAction(LanguagePack|null $languagePack = null): ResponseInterface
+    public function newLanguagePackAction(?LanguagePack $languagePack = null): ResponseInterface
     {
         if (!is_object($languagePack)) {
             $languagePack = new LanguagePack();
@@ -281,14 +201,7 @@ class ManagerController extends ActionController
         $localeUtility = new LocaleUtility();
         $language = $localeUtility->getLanguageFromLocale($locale);
         $languagePack->setLanguage($language);
-        // Get the extension constraints
-        $emConfUtility = GeneralUtility::makeInstance(EmConfUtility::class);
-		$emConf =
-			$emConfUtility->includeEmConf(
-				GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName), ExtensionManagementUtility::extPath(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName))
-			);
-        $constraints = $emConf['constraints'];
-        $languagePack->setTypo3VersionRange($constraints['depends']['typo3'] ?? '');
+        $languagePack->setTypo3VersionRange('^' . GeneralUtility::makeInstance(Typo3Version::class)->getBranch());
         // If version is not set, use the version of the base extension
         if (!$languagePack->getVersion()) {
             $languagePack->setVersion(ExtensionManagementUtility::getExtensionVersion(GeneralUtility::camelCaseToLowerCaseUnderscored($this->extensionName)));
@@ -316,7 +229,7 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormAction(Country|null $country = null, CountryZone|null $countryZone = null, Language|null $language = null): ResponseInterface
+    public function testFormAction(?Country $country = null, ?CountryZone $countryZone = null, ?Language $language = null): ResponseInterface
     {
         if (is_object($country) && (is_object($countryZone) || !$country->getCountryZones()->count())) {
             return (new ForwardResponse('testFormResult'))
@@ -343,7 +256,7 @@ class ManagerController extends ActionController
      * @param CountryZone $countryZone
      * @param Language $language
      */
-    public function testFormResultAction(Country|null $country = null, CountryZone|null $countryZone = null, Language|null $language = null): ResponseInterface
+    public function testFormResultAction(?Country $country = null, ?CountryZone $countryZone = null, ?Language $language = null): ResponseInterface
     {
         $this->moduleTemplate->assign('country', $country);
         $currencies = $this->currencyRepository->findByCountry($country);

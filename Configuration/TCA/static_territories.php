@@ -7,14 +7,12 @@ return [
         'label_alt_force' => 1,
         'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
-        'rootLevel' => 1,
-        'is_static' => 1,
-        'readOnly' => 1,
+        'rootLevel' => true,
+        'readOnly' => true,
         'default_sortby' => 'ORDER BY tr_name_en',
         'delete' => 'deleted',
         'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_territories.title',
-        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_territories.svg',
-        'searchFields' => 'tr_name_en',
+        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_territories.svg'
     ],
     'columns' => [
         'deleted' => [

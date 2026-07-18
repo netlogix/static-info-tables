@@ -1,6 +1,7 @@
 <?php
 declare(strict_types = 1);
 
+use SJBR\StaticInfoTables\Controller\ManagerController;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -10,23 +11,28 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 if (GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('static_info_tables')['enableManager'] ?? false) {
 	return [
 		'staticinfomanager' => [
-			'parent' => 'tools',
+			'parent' => 'admin',
 			'position' => [],
 			'access' => 'admin',
 			'workspaces' => '*',
 			'identifier' => 'staticinfomanager',
 			'isStandalone' => false,
-			'path' => '/module/tools/staticinfomanager',
+			'path' => '/module/admin/staticinfomanager',
 			'iconIdentifier' => 'static-info-tables-icon',
-			'labels' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf',
+			'labels' => [
+				'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf:mlang_tabs_tab',
+				'description' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf:mlang_labels_tabdescr',
+				'shortDescription' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_mod.xlf:mlang_labels_tablabel'
+			],
+			'showSubmoduleOverview' => false,
 			'extensionName' => 'StaticInfoTables',
 			'controllerActions' => [
-				\SJBR\StaticInfoTables\Controller\ManagerController::class => [
+				ManagerController::class => [
 					'information',
 					'newLanguagePack',
-					'createLanguagePack',
+					//'createLanguagePack',
 					'testForm',
-					'testFormResult',
+					//'testFormResult',
 					'sqlDumpNonLocalizedData'
 				]
 			]

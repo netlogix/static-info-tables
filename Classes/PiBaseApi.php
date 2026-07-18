@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables;
 /*
  *  Copyright notice
  *
- *  (c) 2004-2024 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2004-2026 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the Typo3 project. The Typo3 project is

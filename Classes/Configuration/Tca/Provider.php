@@ -6,7 +6,7 @@ namespace SJBR\StaticInfoTables\Configuration\Tca;
  *  Copyright notice
  *
  *  (c) 2017 Manuel Selbach <manuel_selbach@yahoo.de>
- *  (c) 2020-2022 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2020-2026 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,6 +54,8 @@ class Provider
                 $tableName,
                 $destField
             );
+            // Add as search field
+            $additionalColumns[$destField]['config']['searchable'] = true;
             ExtensionManagementUtility::addTCAcolumns($tableName, $additionalColumns);
             ExtensionManagementUtility::addToAllTCAtypes(
                 $tableName,
@@ -61,8 +63,6 @@ class Provider
                 '',
                 'after:' . $sourceField
             );
-            // Add as search field
-            $GLOBALS['TCA'][$tableName]['ctrl']['searchFields'] .= ',' . $destField;
         }
     }
 }

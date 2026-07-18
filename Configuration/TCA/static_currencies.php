@@ -7,14 +7,12 @@ return [
         'label_alt_force' => 1,
         'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
-        'rootLevel' => 1,
-        'is_static' => 1,
-        'readOnly' => 1,
+        'rootLevel' => true,
+        'readOnly' => true,
         'default_sortby' => 'ORDER BY cu_name_en',
         'delete' => 'deleted',
         'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_currencies.title',
-        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_currencies.svg',
-        'searchFields' => 'cu_name_en',
+        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_currencies.svg'
     ],
     'columns' => [
         'deleted' => [
@@ -33,6 +31,7 @@ return [
                 'max' => '3',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'cu_iso_nr' => [
@@ -44,6 +43,7 @@ return [
                 'max' => '3',
                 'eval' => '',
                 'default' => '0',
+                'searchable' => false
             ],
         ],
         'cu_name_en' => [
@@ -67,7 +67,7 @@ return [
                 'max' => '20',
                 'eval' => 'trim',
                 'default' => '',
-                '_is_string' => '1',
+                '_is_string' => '1'
             ],
         ],
         'cu_symbol_left' => [
@@ -80,6 +80,7 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 '_is_string' => '1',
+                'searchable' => false
             ],
         ],
         'cu_symbol_right' => [
@@ -92,6 +93,7 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 '_is_string' => '1',
+                'searchable' => false
             ],
         ],
         'cu_thousands_point' => [
@@ -103,6 +105,7 @@ return [
                 'max' => '1',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'cu_decimal_point' => [
@@ -114,6 +117,7 @@ return [
                 'max' => '1',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'cu_decimal_digits' => [
@@ -150,6 +154,7 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 '_is_string' => '1',
+                'searchable' => false
             ],
         ],
         'cu_sub_symbol_right' => [
@@ -162,6 +167,7 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 '_is_string' => '1',
+                'searchable' => false
             ],
         ],
     ],

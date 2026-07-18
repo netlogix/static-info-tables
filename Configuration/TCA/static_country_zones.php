@@ -5,14 +5,12 @@ return [
         'label' => 'zn_name_local',
         'label_alt' => 'zn_name_local,zn_code',
         'adminOnly' => true,
-        'rootLevel' => 1,
-        'is_static' => 1,
-        'readOnly' => 1,
+        'rootLevel' => true,
+        'readOnly' => true,
         'default_sortby' => 'ORDER BY zn_name_local',
         'delete' => 'deleted',
         'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_country_zones.title',
-        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_country_zones.svg',
-        'searchFields' => 'zn_name_en,zn_name_local',
+        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_country_zones.svg'
     ],
     'columns' => [
         'deleted' => [
@@ -57,6 +55,7 @@ return [
                 'eval' => 'trim',
                 'default' => '',
                 '_is_string' => '1',
+                'searchable' => false
             ],
         ],
         'zn_name_local' => [

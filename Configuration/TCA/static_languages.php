@@ -7,14 +7,12 @@ return [
         'label_alt_force' => 1,
         'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
-        'rootLevel' => 1,
-        'is_static' => 1,
-        'readOnly' => 1,
+        'rootLevel' => true,
+        'readOnly' => true,
         'default_sortby' => 'ORDER BY lg_name_en',
         'delete' => 'deleted',
         'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_languages.title',
-        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_languages.svg',
-        'searchFields' => 'lg_name_en,lg_name_local',
+        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_languages.svg'
     ],
     'columns' => [
         'deleted' => [
@@ -33,6 +31,7 @@ return [
                 'max' => '2',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'lg_name_local' => [
@@ -68,6 +67,7 @@ return [
                 'max' => '2',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'lg_country_iso_2' => [
@@ -79,6 +79,7 @@ return [
                 'max' => '2',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'lg_collate_locale' => [
@@ -90,6 +91,7 @@ return [
                 'max' => '5',
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'lg_sacred' => [

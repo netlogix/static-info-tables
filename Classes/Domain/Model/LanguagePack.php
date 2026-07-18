@@ -4,7 +4,7 @@ namespace SJBR\StaticInfoTables\Domain\Model;
 /*
  *  Copyright notice
  *
- *  (c) 2013-2021 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
+ *  (c) 2013-2026 Stanislas Rolland <typo3AAAA(arobas)sjbr.ca>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,7 +35,7 @@ use SJBR\StaticInfoTables\Domain\Repository\TerritoryRepository;
 use TYPO3\CMS\Core\Localization\Parser\XliffParser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation\Validate;
+use TYPO3\CMS\Extbase\Attribute\Validate;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -52,8 +52,8 @@ class LanguagePack extends AbstractEntity
 
     /**
      * @var string
-     * @Validate("TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator")
      */
+    #[Validate(validator: 'NotEmpty')]
     protected $author;
 
     /**
@@ -63,14 +63,14 @@ class LanguagePack extends AbstractEntity
 
     /**
      * @var string
-     * @Validate("TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator")
      */
+    #[Validate(validator: 'NotEmpty')]
     protected $vendorName;
 
     /**
      * @var string
-     * @Validate("EmailAddress")
      */
+    #[Validate(validator: 'EmailAddress')]
     protected $authorEmail;
 
     /**
@@ -90,8 +90,8 @@ class LanguagePack extends AbstractEntity
 
     /**
      * @var string
-     * @Validate("TYPO3\CMS\Extbase\Validation\Validator\NotEmptyValidator")
      */
+    #[Validate(validator: 'NotEmpty')]
     protected $version;
 
     /**

@@ -7,14 +7,12 @@ return [
         'label_alt_force' => 1,
         'label_userFunc' => \SJBR\StaticInfoTables\Hook\Backend\Form\FormDataProvider\TcaLabelProcessor::class . '->addIsoCodeToLabel',
         'adminOnly' => true,
-        'rootLevel' => 1,
-        'is_static' => 1,
-        'readOnly' => 1,
+        'rootLevel' => true,
+        'readOnly' => true,
         'default_sortby' => 'ORDER BY cn_short_en',
         'delete' => 'deleted',
         'title' => 'LLL:EXT:static_info_tables/Resources/Private/Language/locallang_db.xlf:static_countries.title',
-        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_countries.svg',
-        'searchFields' => 'cn_short_en,cn_official_name_local,cn_official_name_en',
+        'iconfile' => 'EXT:static_info_tables/Resources/Public/Images/Icons/static_countries.svg'
     ],
     'columns' => [
         'cn_official_name_local' => [
@@ -57,6 +55,7 @@ return [
                 'max' => 2,
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'cn_iso_3' => [
@@ -68,6 +67,7 @@ return [
                 'max' => 3,
                 'eval' => '',
                 'default' => '',
+                'searchable' => false
             ],
         ],
         'cn_iso_nr' => [
@@ -79,7 +79,8 @@ return [
 					'lower' => 0
 				],
 				'size' => 20,
-                'default' => 0
+                'default' => 0,
+                'searchable' => false
             ]
         ],
         'cn_parent_territory_uid' => [
@@ -170,6 +171,7 @@ return [
                 'max' => 20,
                 'eval' => '',
                 'default' => '0',
+                'searchable' => false
             ],
         ],
         'cn_eu_member' => [

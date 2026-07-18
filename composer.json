@@ -22,9 +22,6 @@
   "support": {
     "issues": "https://codeberg.org/sjbr/static-info-tables/issues"
   },
-  "replace": {
-    "typo3-ter/static-info-tables": "self.version"
-  },
   "require": {
     "typo3/cms-backend": "^14.3",
     "typo3/cms-core": "^14.3",
@@ -47,7 +44,11 @@
   },
   "extra": {
     "typo3/cms": {
-      "extension-key": "static_info_tables"
+      "extension-key": "static_info_tables",
+      "version": "14.3.0",
+      "Package": {
+		"providesPackages": {}
+	  }
     }
   },
   "scripts": {
